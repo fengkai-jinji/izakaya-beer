@@ -1,0 +1,12 @@
+import * as THREE from 'three';
+const cache=new Map();
+function star(c,x,y,r){c.beginPath();for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr=i%2?r*.4:r;c.lineTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr);}c.closePath();c.fill();}
+export function paintLabel(variant){if(cache.has(variant))return cache.get(variant);const canvas=document.createElement('canvas');canvas.width=256;canvas.height=128;const c=canvas.getContext('2d');c.textAlign='center';c.textBaseline='middle';
+ const sapporo=variant==='sapporo'||variant==='sapporoStar';c.fillStyle=variant==='suntory'?'#dab768':variant==='sapporoStar'?'#15130f':sapporo?'#f4efe6':'#eeede7';c.fillRect(0,0,256,128);c.strokeStyle='#a48a58';c.lineWidth=3;c.strokeRect(4,4,248,120);
+ if(sapporo){c.fillStyle='#141410';c.beginPath();c.arc(128,34,27,0,Math.PI*2);c.fill();c.fillStyle='#f0b400';star(c,128,33,21);c.fillStyle=variant==='sapporoStar'?'#f0b400':'#15130f';c.font='bold 33px Georgia,serif';c.fillText('SAPPORO',128,79);c.fillStyle='#a43627';c.fillRect(30,99,196,2);c.font='11px Georgia,serif';c.fillStyle=variant==='sapporoStar'?'#f0b400':'#252016';c.fillText('L A G E R   B E E R',128,114);}
+ else if(variant==='kirin'){c.fillStyle='#a72a24';c.fillRect(0,0,256,20);c.font='16px Georgia,serif';c.fillStyle='#ede5cf';c.fillText('K I R I N',128,11);c.fillStyle='#1a1410';c.font='bold 43px "Noto Sans JP",serif';c.fillText('一番搾り',128,66);c.font='13px Georgia';c.fillText('ICHIBAN SHIBORI',128,109);}
+ else if(variant==='asahi'||variant==='asahiCan'){c.fillStyle='#171917';c.font='italic bold 58px Georgia,serif';c.fillText('Asahi',128,49);c.fillStyle='#c62722';c.fillRect(0,86,256,28);c.fillStyle='#fff';c.font='bold 23px Arial';c.fillText('SUPER DRY',128,101);c.fillStyle='#363735';c.font='12px Arial';c.fillText('辛口   生ビール',128,76);}
+ else if(variant==='suntoryCan'){c.fillStyle='#a62620';c.font='bold 75px "Noto Sans JP",serif';c.fillText('生',128,51);c.fillStyle='#252420';c.font='bold 23px Georgia';c.fillText('SUNTORY',128,107);}
+ else{c.fillStyle='#14213b';c.font='italic 18px Georgia';c.fillText('The',128,20);c.font='bold 26px Georgia';c.fillText('PREMIUM',128,51);c.font='bold 35px Georgia';c.fillText("MALT’S",128,84);c.font='13px Georgia';c.fillText('S U N T O R Y',128,112);}
+ const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;texture.userData.variant=variant;cache.set(variant,texture);return texture;}
+export function disposeLabels(){for(const t of cache.values())t.dispose();cache.clear();}

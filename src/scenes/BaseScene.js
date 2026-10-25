@@ -1,0 +1,1 @@
+export class BaseScene {constructor(){this.progress=0;this.active=false;}async init(){}onEnter(){this.active=true;}setProgress(p){this.progress=p;}update(){}onLeave(){this.active=false;}dispose(){this.onLeave();}}

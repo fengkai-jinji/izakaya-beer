@@ -1,0 +1,10 @@
+vec2 grid=vSurfaceUv*vec2(32.0,24.0);
+vec2 local=fract(grid);
+vec2 aa=fwidth(grid);
+vec2 mortar=smoothstep(vec2(.012)+aa,vec2(.012)-aa,min(local,1.0-local));
+float grout=max(mortar.x,mortar.y);
+float tileHash=fract(sin(dot(floor(grid),vec2(127.1,311.7)))*43758.5453);
+vec3 ceramic=diffuseColor.rgb*(.97+.06*tileHash);
+diffuseColor.rgb=mix(ceramic,vec3(.144,.122,.097),grout*.8);
+vec4 menuInk=texture2D(uMenu,vSurfaceUv);
+diffuseColor.rgb=mix(diffuseColor.rgb,menuInk.rgb,menuInk.a);
